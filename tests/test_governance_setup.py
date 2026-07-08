@@ -90,3 +90,13 @@ def test_dry_run_does_not_write_files(tmp_path, capsys):
     assert result == 0
     assert "Would write" in captured.out
     assert not (target / ".codex" / "AGENTS.md").exists()
+
+def test_bare_run_prints_help_without_writing(tmp_path, capsys):
+    target = tmp_path / "target"
+    result = setup.main([])
+    captured = capsys.readouterr()
+
+    assert result == 0
+    assert "usage: " in captured.out
+    assert not target.exists()
+

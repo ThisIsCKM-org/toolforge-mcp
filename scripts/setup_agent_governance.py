@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -211,7 +212,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
-    args = parser.parse_args(argv)
+    raw_args = sys.argv[1:] if argv is None else argv
+    if not raw_args:
+        parser.print_help()
+        return 0
+    args = parser.parse_args(raw_args)
     try:
         agents = parse_agents(args.agents)
     except ValueError as exc:

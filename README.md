@@ -220,7 +220,14 @@ The shared policy is:
 ### Setup Script
 
 Use the setup script to install project-scoped governance and MCP config for
-Codex, Claude Code, and Cursor:
+Codex, Claude Code, and Cursor. Running the script without arguments prints
+help and does not write files:
+
+```bash
+python3 scripts/setup_agent_governance.py
+```
+
+Pass explicit options to install governance/config files:
 
 ```bash
 python3 scripts/setup_agent_governance.py \
