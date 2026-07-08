@@ -1,0 +1,12 @@
+# Add this to ~/.codex/config.toml, or to .codex/config.toml in a trusted project.
+
+[mcp_servers.toolforge]
+command = "uv"
+args = ["--directory", "/absolute/path/to/toolforge-mcp", "run", "toolforge-mcp"]
+startup_timeout_sec = 20
+tool_timeout_sec = 120
+
+[mcp_servers.toolforge.env]
+TOOLFORGE_DB_PATH = "/absolute/path/to/toolforge-mcp/data/toolforge.db"
+TOOLFORGE_TOOLS_DIR = "/absolute/path/to/toolforge-mcp/tools"
+TOOLFORGE_WORK_DIR = "/absolute/path/to/toolforge-mcp/work"

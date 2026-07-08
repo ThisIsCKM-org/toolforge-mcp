@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "toolforge": {
+      "command": "uv",
+      "args": ["--directory", "/absolute/path/to/toolforge-mcp", "run", "toolforge-mcp"],
+      "env": {
+        "TOOLFORGE_DB_PATH": "/absolute/path/to/toolforge-mcp/data/toolforge.db",
+        "TOOLFORGE_TOOLS_DIR": "/absolute/path/to/toolforge-mcp/tools",
+        "TOOLFORGE_WORK_DIR": "/absolute/path/to/toolforge-mcp/work"
+      }
+    }
+  }
+}

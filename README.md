@@ -198,6 +198,25 @@ Then replace the MCP command with:
 }
 ```
 
+## Agent Governance Pack
+
+ToolForge includes copy-ready governance examples for teams that want Codex,
+Claude Code, and Cursor to consistently reuse MCP tools instead of creating
+throwaway scripts.
+
+See [`governance/`](governance/) for:
+
+- Codex `AGENTS.md` guidance and `config.toml` MCP example
+- Claude Code `CLAUDE.md` guidance and `.mcp.json` example
+- Cursor `.mdc` rule and `.cursor/mcp.json` example
+
+The shared policy is:
+
+1. Search ToolForge before creating utility scripts.
+2. Run an approved tool when one exists.
+3. Register newly generated reusable utility scripts as draft tools.
+4. Approve tools only after human or authorized workflow review.
+
 ## Stored Tool Contract
 
 Stored scripts must:
