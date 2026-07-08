@@ -67,9 +67,17 @@ cd /absolute/path/to/toolforge-mcp
 uv sync --extra dev
 ```
 
-The `--extra dev` option installs optional libraries used by the default seed
-tools, such as PDF and image helpers. If you do not use `uv`, create a Python
-environment and install the package dependencies from `pyproject.toml`.
+The `--extra dev` option installs test dependencies and optional libraries used
+by the default seed tools, such as PDF and image helpers. Local semantic
+embeddings are optional because they pull a larger ML dependency stack. To enable
+them, run:
+
+```bash
+uv sync --extra dev --extra semantic
+```
+
+If you do not use `uv`, create a Python environment and install the package
+dependencies from `pyproject.toml`.
 
 ### Codex
 
@@ -177,6 +185,8 @@ cd /absolute/path/to/toolforge-mcp
 python3 -m venv .venv
 . .venv/bin/activate
 python3 -m pip install -e ".[dev]"
+# Optional semantic embeddings:
+# python3 -m pip install -e ".[dev,semantic]"
 ```
 
 Then replace the MCP command with:
