@@ -49,6 +49,145 @@ or:
 python3 server.py
 ```
 
+## Connect MCP Clients
+
+ToolForge MCP is a local stdio MCP server. The MCP client starts the process,
+then discovers the server instructions and available tools at connection time.
+
+Use absolute paths in client configuration so the server can start from any
+working directory. Replace `/absolute/path/to/toolforge-mcp` with your local
+checkout path.
+
+### Recommended Setup
+
+Install runtime dependencies before connecting a client:
+
+```bash
+cd /absolute/path/to/toolforge-mcp
+uv sync --extra dev
+```
+
+The `--extra dev` option installs optional libraries used by the default seed
+tools, such as PDF and image helpers. If you do not use `uv`, create a Python
+environment and install the package dependencies from `pyproject.toml`.
+
+### Codex
+
+Codex reads MCP servers from `~/.codex/config.toml`, or from a project-scoped
+`.codex/config.toml` in trusted projects. The Codex CLI and IDE extension share
+this configuration.
+
+CLI setup:
+
+```bash
+codex mcp add toolforge --env TOOLFORGE_DB_PATH=/absolute/path/to/toolforge-mcp/data/toolforge.db --env TOOLFORGE_TOOLS_DIR=/absolute/path/to/toolforge-mcp/tools --env TOOLFORGE_WORK_DIR=/absolute/path/to/toolforge-mcp/work -- uv --directory /absolute/path/to/toolforge-mcp run toolforge-mcp
+```
+
+Equivalent `~/.codex/config.toml` entry:
+
+```toml
+[mcp_servers.toolforge]
+command = "uv"
+args = ["--directory", "/absolute/path/to/toolforge-mcp", "run", "toolforge-mcp"]
+startup_timeout_sec = 20
+tool_timeout_sec = 120
+
+[mcp_servers.toolforge.env]
+TOOLFORGE_DB_PATH = "/absolute/path/to/toolforge-mcp/data/toolforge.db"
+TOOLFORGE_TOOLS_DIR = "/absolute/path/to/toolforge-mcp/tools"
+TOOLFORGE_WORK_DIR = "/absolute/path/to/toolforge-mcp/work"
+```
+
+In the Codex TUI, run `/mcp` to confirm that `toolforge` is connected.
+
+### Claude Code
+
+Claude Code can add local stdio MCP servers with `claude mcp add`. The `--`
+separator is important: everything after it is the command used to start the MCP
+server.
+
+CLI setup:
+
+```bash
+claude mcp add \
+  --env TOOLFORGE_DB_PATH=/absolute/path/to/toolforge-mcp/data/toolforge.db \
+  --env TOOLFORGE_TOOLS_DIR=/absolute/path/to/toolforge-mcp/tools \
+  --env TOOLFORGE_WORK_DIR=/absolute/path/to/toolforge-mcp/work \
+  --transport stdio \
+  toolforge \
+  -- uv --directory /absolute/path/to/toolforge-mcp run toolforge-mcp
+```
+
+Project-scoped `.mcp.json` example:
+
+```json
+{
+  "mcpServers": {
+    "toolforge": {
+      "command": "uv",
+      "args": ["--directory", "/absolute/path/to/toolforge-mcp", "run", "toolforge-mcp"],
+      "env": {
+        "TOOLFORGE_DB_PATH": "/absolute/path/to/toolforge-mcp/data/toolforge.db",
+        "TOOLFORGE_TOOLS_DIR": "/absolute/path/to/toolforge-mcp/tools",
+        "TOOLFORGE_WORK_DIR": "/absolute/path/to/toolforge-mcp/work"
+      },
+      "timeout": 120000
+    }
+  }
+}
+```
+
+Inside Claude Code, use `/mcp` to inspect server status. Project-scoped MCP
+servers may require workspace trust approval before they become active.
+
+### Cursor
+
+Cursor reads MCP servers from JSON configuration. Use a project-scoped
+`.cursor/mcp.json` when ToolForge should be available only for this repository,
+or a user-level MCP configuration when you want it available across projects.
+
+Project-scoped `.cursor/mcp.json` example:
+
+```json
+{
+  "mcpServers": {
+    "toolforge": {
+      "command": "uv",
+      "args": ["--directory", "/absolute/path/to/toolforge-mcp", "run", "toolforge-mcp"],
+      "env": {
+        "TOOLFORGE_DB_PATH": "/absolute/path/to/toolforge-mcp/data/toolforge.db",
+        "TOOLFORGE_TOOLS_DIR": "/absolute/path/to/toolforge-mcp/tools",
+        "TOOLFORGE_WORK_DIR": "/absolute/path/to/toolforge-mcp/work"
+      }
+    }
+  }
+}
+```
+
+After editing Cursor MCP settings, reload Cursor or restart the agent session,
+then confirm that the ToolForge tools appear in Cursor's MCP/tools panel.
+
+### Without `uv`
+
+If `uv` is not available, install the project into a virtual environment and use
+that environment's Python directly:
+
+```bash
+cd /absolute/path/to/toolforge-mcp
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install -e ".[dev]"
+```
+
+Then replace the MCP command with:
+
+```json
+{
+  "command": "/absolute/path/to/toolforge-mcp/.venv/bin/python",
+  "args": ["/absolute/path/to/toolforge-mcp/server.py"]
+}
+```
+
 ## Stored Tool Contract
 
 Stored scripts must:
