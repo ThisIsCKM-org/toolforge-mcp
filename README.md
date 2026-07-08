@@ -217,6 +217,35 @@ The shared policy is:
 3. Register newly generated reusable utility scripts as draft tools.
 4. Approve tools only after human or authorized workflow review.
 
+### Setup Script
+
+Use the setup script to install project-scoped governance and MCP config for
+Codex, Claude Code, and Cursor:
+
+```bash
+python3 scripts/setup_agent_governance.py \
+  --agents all \
+  --target-project /path/to/your/project \
+  --toolforge-dir /absolute/path/to/toolforge-mcp
+```
+
+Preview changes without writing files:
+
+```bash
+python3 scripts/setup_agent_governance.py --agents all --target-project /path/to/your/project --dry-run
+```
+
+Configure one agent at a time:
+
+```bash
+python3 scripts/setup_agent_governance.py --agents codex --target-project /path/to/your/project
+python3 scripts/setup_agent_governance.py --agents claude --target-project /path/to/your/project
+python3 scripts/setup_agent_governance.py --agents cursor --target-project /path/to/your/project
+```
+
+The script updates managed ToolForge sections idempotently and preserves other
+MCP servers in JSON config files.
+
 ## Stored Tool Contract
 
 Stored scripts must:
